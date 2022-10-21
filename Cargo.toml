@@ -1,0 +1,23 @@
+[package]
+name = "fluent_content"
+version = "0.0.1"
+edition = "2021"
+description = "Fluent extension for easy access to message content."
+readme = "README.md"
+homepage = "https://crates.io/crates/fluent_content"
+repository = "https://github.com/kgv/fluent_content"
+license = "MIT OR Apache-2.0"
+keywords = ["fluent", "internationalization", "localization"]
+categories = ["internationalization", "localization"]
+exclude = [".github/**/*"]
+
+[dependencies]
+fluent = "0.16.0"
+fluent-langneg = "0.13.0"
+intl-memoizer = "0.5.1"
+thiserror = "1.0.37"
+tracing = "0.1.37"
+unic-langid = { version = "0.9.0", features = ["serde"] }
+
+[dev-dependencies]
+unic-langid = { version = "0.9.0", features = ["macros"] }
