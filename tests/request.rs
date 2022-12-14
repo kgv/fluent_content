@@ -16,7 +16,7 @@ fn id_args() {
             ..
         } if args.get("key1") == Some(&"value1".into())
             && args.get("key2") == Some(&2.into())
-            && args.get("key3") == None
+            && args.get("key3").is_none()
     ));
 }
 
@@ -72,7 +72,7 @@ fn id_attr_args() {
             args: Some(args),
         } if args.get("key1") == Some(&"value1".into())
             && args.get("key2") == Some(&2.into())
-            && args.get("key3") == None
+            && args.get("key3").is_none()
     ));
 }
 
