@@ -1,16 +1,12 @@
-use crate::{
-    error::{Error, Result},
-    Request,
-};
-use fluent::{
-    bundle::FluentBundle, memoizer::MemoizerKind, FluentArgs, FluentError, FluentResource,
-};
+use crate::Request;
+use fluent::{bundle::FluentBundle, memoizer::MemoizerKind, FluentArgs, FluentResource};
 use std::borrow::Borrow;
+use tracing::error;
 
 /// Content
 pub trait Content<'a, T: Into<Request<'a, U>>, U: Borrow<FluentArgs<'a>>> {
     /// Request message content
-    fn content(&self, request: T) -> Result<String>;
+    fn content(&self, request: T) -> Option<String>;
 }
 
 impl<'a, T, U, V, W> Content<'a, T, U> for FluentBundle<V, W>
@@ -20,23 +16,13 @@ where
     V: Borrow<FluentResource>,
     W: MemoizerKind,
 {
-    fn content(&self, request: T) -> Result<String> {
+    fn content(&self, request: T) -> Option<String> {
         let request = request.into();
         let request = request.borrow();
-        let message = self
-            .get_message(request.id)
-            .ok_or_else(|| Error::Id(request.id.to_string()))?;
+        let message = self.get_message(request.id)?;
         let pattern = match request.attr {
-            Some(key) => message
-                .get_attribute(key)
-                .ok_or_else(|| Error::Attribute {
-                    id: request.id.to_string(),
-                    attribute: key.to_string(),
-                })?
-                .value(),
-            None => message.value().ok_or_else(|| Error::Value {
-                id: request.id.to_string(),
-            })?,
+            Some(key) => message.get_attribute(key)?.value(),
+            None => message.value()?,
         };
         let mut errors = Vec::new();
         let content = self
@@ -46,16 +32,9 @@ where
                 &mut errors,
             )
             .to_string();
-        if !errors.is_empty() {
-            let errors = errors
-                .into_iter()
-                .map(|error| match error {
-                    FluentError::ResolverError(error) => error,
-                    _ => unreachable!(),
-                })
-                .collect();
-            return Err(Error::Argument(errors));
+        for error in &errors {
+            error!(%error);
         }
-        Ok(content)
+        Some(content)
     }
 }

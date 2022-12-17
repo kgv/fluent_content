@@ -5,11 +5,7 @@
 // #![feature(default_free_fn)]
 // #![feature(if_let_guard)]
 
-pub use self::{
-    content::Content,
-    error::{Error, Result},
-    request::Request,
-};
+pub use self::{content::Content, request::Request};
 
 /// `use fluent_content::prelude::*;` to import common traits
 pub mod prelude {
@@ -17,8 +13,6 @@ pub mod prelude {
     pub use super::Content;
 }
 
-pub mod content;
-
-mod error;
+mod content;
 mod request;
 mod utils;
