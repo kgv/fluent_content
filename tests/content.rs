@@ -30,7 +30,9 @@ fn id_args() {
     );
 
     let content = bundle.content("id?arg1=Argument 1");
-    assert!(content.is_none());
+    assert!(
+        matches!(content, Some(content) if content == "Value with argument \u{2068}{$arg}\u{2069}")
+    );
 }
 
 #[test]
@@ -57,5 +59,7 @@ fn id_attr_args() {
     );
 
     let content = bundle.content("id.attr?arg1=Argument 1");
-    assert!(content.is_none());
+    assert!(
+        matches!(content, Some(content) if content == "Attribute value with argument \u{2068}{$arg}\u{2069}")
+    );
 }

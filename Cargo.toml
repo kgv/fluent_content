@@ -1,6 +1,6 @@
 [package]
 name = "fluent_content"
-version = "0.0.3"
+version = "0.0.4"
 edition = "2021"
 description = "Fluent extension for easy access to message content."
 readme = "README.md"
