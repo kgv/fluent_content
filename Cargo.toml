@@ -1,6 +1,6 @@
 [package]
 name = "fluent_content"
-version = "0.0.4"
+version = "0.0.5"
 edition = "2021"
 description = "Fluent extension for easy access to message content."
 readme = "README.md"
@@ -15,7 +15,7 @@ exclude = [".github/**/*"]
 fluent = "0.16.0"
 fluent-langneg = "0.13.0"
 intl-memoizer = "0.5.1"
-thiserror = "1.0.37"
+thiserror = "1.0.40"
 tracing = "0.1.37"
 unic-langid = { version = "0.9.1", features = ["serde"] }
 
