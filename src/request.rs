@@ -1,12 +1,11 @@
-use crate::utils::default;
-use fluent::{types::FluentNumber, FluentArgs, FluentValue};
+use fluent::{FluentArgs, FluentValue, types::FluentNumber};
 use fmt::Write;
 use std::{
     borrow::Borrow,
     fmt::{self, Display, Formatter},
 };
 
-fn parse_args(args: &str) -> FluentArgs {
+fn parse_args(args: &'_ str) -> FluentArgs<'_> {
     let mut fluent_args = FluentArgs::new();
     for arg in args.split('&') {
         match arg.split_once('=') {
@@ -70,7 +69,10 @@ pub struct Request<'a, T> {
 
 impl<'a> Request<'a, &'static FluentArgs<'static>> {
     pub fn new(id: &'a str) -> Self {
-        Self { id, ..default() }
+        Self {
+            id,
+            ..Default::default()
+        }
     }
 }
 
@@ -96,9 +98,9 @@ impl<'a, T> Request<'a, T> {
 impl<T> Default for Request<'_, T> {
     fn default() -> Self {
         Self {
-            id: default(),
-            attr: default(),
-            args: default(),
+            id: Default::default(),
+            attr: Default::default(),
+            args: Default::default(),
         }
     }
 }
@@ -148,18 +150,18 @@ impl<'a> From<&'a str> for Request<'a, FluentArgs<'a>> {
                 None => Self {
                     id,
                     attr: Some(value),
-                    ..default()
+                    ..Default::default()
                 },
             },
             None => match value.split_once('?') {
                 Some((id, args)) => Self {
                     id,
                     args: Some(parse_args(args)),
-                    ..default()
+                    ..Default::default()
                 },
                 None => Self {
                     id: value,
-                    ..default()
+                    ..Default::default()
                 },
             },
         }

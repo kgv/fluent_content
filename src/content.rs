@@ -1,7 +1,7 @@
 use crate::Request;
-use fluent::{bundle::FluentBundle, memoizer::MemoizerKind, FluentArgs, FluentResource};
+use fluent::{FluentArgs, FluentResource, bundle::FluentBundle, memoizer::MemoizerKind};
 use std::borrow::Borrow;
-use tracing::error;
+use tracing::warn;
 
 /// Content
 pub trait Content<'a, T: Into<Request<'a, U>>, U: Borrow<FluentArgs<'a>>> {
@@ -33,7 +33,7 @@ where
             )
             .to_string();
         for error in &errors {
-            error!(%error);
+            warn!(%error);
         }
         Some(content)
     }
